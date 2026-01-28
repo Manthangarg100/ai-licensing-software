@@ -1,5 +1,11 @@
 import "./globals.css";
-import { Providers } from "./providers";
+import Navbar from "@/components/Navbar";
+import ThemeProvider from "@/components/ThemeProvider";
+
+export const metadata = {
+  title: "SanrakshakAI",
+  description: "AI-powered content rights & compliance platform",
+};
 
 export default function RootLayout({
   children,
@@ -9,7 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <ThemeProvider>
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

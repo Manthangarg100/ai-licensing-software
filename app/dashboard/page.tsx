@@ -1,40 +1,141 @@
-export default function DashboardPage() {
+"use client";
+
+const mockDashboardData = {
+  metrics: {
+    activeLicenses: 240,
+    regionsCovered: 12,
+    activeAlerts: 6,
+    violations: 3,
+  },
+  aiStatus: {
+    lastRun: "2 minutes ago",
+    rulesApplied: 18,
+    confidence: 94,
+  },
+  humanFeedback: {
+    pendingReviews: 2,
+    escalations: 1,
+  },
+};
+
+export default function DashboardOverview() {
+  const { metrics, aiStatus, humanFeedback } = mockDashboardData;
+
   return (
-    <div>
+    <div className="px-10 py-10">
       {/* HEADER */}
-      <h1 className="text-3xl font-semibold tracking-tight text-white">
-        Dashboard Overview
-      </h1>
+      <div className="mb-10">
+        <h1 className="text-3xl font-semibold tracking-tight">
+          Dashboard Overview
+        </h1>
+        <p className="mt-2 text-foreground/60">
+          Monitor content usage, AI enforcement, and human reviews in one place.
+        </p>
+      </div>
 
-      <p className="mt-2 text-slate-400">
-        Monitor content usage and licensing status at a glance.
-      </p>
+      {/* METRICS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
+        <MetricCard
+          label="Active Licenses"
+          value={metrics.activeLicenses}
+        />
+        <MetricCard
+          label="Regions Covered"
+          value={metrics.regionsCovered}
+        />
+        <MetricCard
+          label="Active Alerts"
+          value={metrics.activeAlerts}
+        />
+        <MetricCard
+          label="Violations"
+          value={metrics.violations}
+        />
+      </div>
 
-      {/* STATS */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <StatCard title="Active Licenses" value="240" />
-        <StatCard title="Regions Covered" value="12" />
-        <StatCard title="Active Alerts" value="6" />
-        <StatCard title="Violations" value="3" />
+      {/* SYSTEM STATUS */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* AI STATUS */}
+        <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-6">
+          <h2 className="text-lg font-medium mb-4">
+            Sanrakshak AI Status
+          </h2>
+
+          <div className="space-y-3 text-sm text-foreground/80">
+            <StatusRow label="Last Evaluation Run" value={aiStatus.lastRun} />
+            <StatusRow
+              label="Rules Applied"
+              value={`${aiStatus.rulesApplied}`}
+            />
+            <StatusRow
+              label="AI Confidence"
+              value={`${aiStatus.confidence}%`}
+              highlight
+            />
+          </div>
+        </div>
+
+        {/* HUMAN FEEDBACK */}
+        <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-6">
+          <h2 className="text-lg font-medium mb-4">
+            Human Feedback Loop
+          </h2>
+
+          <div className="space-y-3 text-sm text-foreground/80">
+            <StatusRow
+              label="Pending Reviews"
+              value={humanFeedback.pendingReviews}
+            />
+            <StatusRow
+              label="Escalations"
+              value={humanFeedback.escalations}
+              highlight
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function StatCard({
-  title,
+/* ----------------- SMALL COMPONENTS ----------------- */
+
+function MetricCard({
+  label,
   value,
 }: {
-  title: string;
-  value: string;
+  label: string;
+  value: number;
 }) {
   return (
-    <div className="rounded-2xl bg-[#0b1210] border border-white/10 p-6 shadow-lg">
-      <p className="text-sm text-slate-400">{title}</p>
-
-      <p className="mt-4 text-3xl font-semibold text-emerald-400">
+    <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-6">
+      <div className="text-sm text-foreground/60">{label}</div>
+      <div className="mt-3 text-3xl font-semibold text-emerald-400">
         {value}
-      </p>
+      </div>
+    </div>
+  );
+}
+
+function StatusRow({
+  label,
+  value,
+  highlight = false,
+}: {
+  label: string;
+  value: string | number;
+  highlight?: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-foreground/60">{label}</span>
+      <span
+        className={`font-medium ${
+          highlight ? "text-emerald-400" : "text-foreground"
+        }`}
+      >
+        {value}
+      </span>
     </div>
   );
 }

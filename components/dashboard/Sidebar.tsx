@@ -6,6 +6,9 @@ import {
   LayoutGrid,
   FileText,
   Activity,
+  AlertTriangle,
+  UserCheck,
+  Gavel,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -14,7 +17,10 @@ const navItems = [
   { name: "Overview", href: "/dashboard", icon: LayoutGrid },
   { name: "Licenses", href: "/dashboard/licenses", icon: FileText },
   { name: "Monitoring", href: "/dashboard/monitoring", icon: Activity },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { name: "Alerts", href: "/dashboard/alerts", icon: AlertTriangle },
+  { name: "Human Review", href: "/dashboard/review", icon: UserCheck },
+  { name: "Enforcement", href: "/dashboard/enforcement", icon: Gavel },
+  { name: "Settings", href: "/dashboard/settings", icon: Settings }, // ✅ NEW
 ];
 
 export default function Sidebar() {
@@ -22,14 +28,15 @@ export default function Sidebar() {
   const router = useRouter();
 
   return (
-    <aside className="w-64 border-r border-white/10 bg-black/40 backdrop-blur-xl flex flex-col">
+    <aside className="w-64 min-h-screen border-r border-white/10 bg-black/50 backdrop-blur-xl flex flex-col">
+      
       {/* LOGO */}
       <div className="px-6 py-6 text-lg font-semibold tracking-tight">
         Sanrakshak<span className="text-emerald-400">AI</span>
       </div>
 
       {/* NAV */}
-      <nav className="flex-1 mt-2 flex flex-col gap-1 px-3">
+      <nav className="flex-1 px-3 space-y-1">
         {navItems.map(({ name, href, icon: Icon }) => {
           const active = pathname === href;
 
@@ -42,8 +49,7 @@ export default function Sidebar() {
                   active
                     ? "bg-emerald-500/15 text-emerald-400"
                     : "text-foreground/70 hover:bg-white/5 hover:text-foreground"
-                }
-              `}
+                }`}
             >
               <Icon className="h-4 w-4" />
               {name}
@@ -53,11 +59,11 @@ export default function Sidebar() {
       </nav>
 
       {/* LOGOUT */}
-      <div className="p-4 border-t border-white/10">
+      <div className="px-3 pb-6">
         <button
           onClick={() => router.push("/")}
-          className="w-full flex items-center gap-3 rounded-xl px-4 py-3
-                     text-sm text-red-400 hover:bg-red-500/10 transition"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm
+                     text-red-400 hover:bg-red-500/10 transition"
         >
           <LogOut className="h-4 w-4" />
           Logout
