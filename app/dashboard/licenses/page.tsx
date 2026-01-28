@@ -1,123 +1,129 @@
 "use client";
 
+import { useRef } from "react";
 import { useLanguage } from "@/components/LanguageProvider";
 
-const violations = [
+const licenses = [
   {
-    content: "Music Track X",
-    platform: "Instagram",
-    territory: "EU",
-    exclusivity: "Exclusive",
-    issue: "usageBeyondRegion",
-    severity: "high",
-    confidence: "96%",
-    status: "actionRequired",
-  },
-  {
+    id: "LIC-1024",
     content: "Movie Trailer A",
     platform: "YouTube",
-    territory: "Global",
-    exclusivity: "Non-Exclusive",
-    issue: "expiredLicenseUsage",
-    severity: "medium",
-    confidence: "89%",
-    status: "underReview",
+    region: "Global",
+    status: "active",
+    expires: "2025-06-30",
   },
   {
-    content: "Web Series Ep 3",
+    id: "LIC-1025",
+    content: "Web Series Episode 3",
     platform: "OTT Platform",
-    territory: "India",
-    exclusivity: "Exclusive",
-    issue: "exceededViews",
-    severity: "low",
-    confidence: "72%",
-    status: "logged",
+    region: "India",
+    status: "expired",
+    expires: "2024-12-01",
+  },
+  {
+    id: "LIC-1026",
+    content: "Music Track X",
+    platform: "Instagram",
+    region: "US, EU",
+    status: "violation",
+    expires: "2025-01-15",
   },
 ];
 
-const severityStyle: Record<string, string> = {
-  high: "text-red-400 bg-red-400/10",
-  medium: "text-amber-400 bg-amber-400/10",
-  low: "text-emerald-400 bg-emerald-400/10",
+const statusStyles: Record<string, string> = {
+  active: "text-emerald-400 bg-emerald-400/10",
+  expired: "text-amber-400 bg-amber-400/10",
+  violation: "text-red-400 bg-red-400/10",
 };
 
-export default function AlertsPage() {
+export default function LicensesPage() {
   const { t } = useLanguage();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    console.log("Uploaded license file:", file);
+    // TODO: send file to backend (FormData)
+  };
 
   return (
-    <div className="p-10 space-y-10">
-      {/* HEADER */}
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">
-          {t("alerts")}
-        </h1>
-        <p className="mt-2 text-foreground/70 max-w-xl">
-          {t("alertsDescription")}
-        </p>
+    <div className="p-10">
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {t("licenses")}
+          </h1>
+          <p className="mt-2 text-foreground/70 max-w-xl">
+            {t("licensesDescription")}
+          </p>
+        </div>
+
+        {/* Upload Button */}
+        <div>
+          <button
+            onClick={handleUploadClick}
+            className="rounded-xl bg-emerald-500 px-5 py-2 text-sm font-medium text-black hover:bg-emerald-400 transition"
+          >
+            {t("uploadLicense")}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf,.png,.jpg,.jpeg"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+        </div>
       </div>
 
-      {/* TABLE */}
       <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-white/5 text-foreground/70">
             <tr>
-              <th className="px-6 py-4 text-left font-medium">{t("content")}</th>
-              <th className="px-6 py-4 text-left font-medium">{t("platform")}</th>
-              <th className="px-6 py-4 text-left font-medium">{t("territory")}</th>
-              <th className="px-6 py-4 text-left font-medium">{t("exclusivity")}</th>
-              <th className="px-6 py-4 text-left font-medium">{t("issue")}</th>
-              <th className="px-6 py-4 text-left font-medium">{t("severity")}</th>
-              <th className="px-6 py-4 text-left font-medium">
-                {t("aiConfidence")}
-              </th>
-              <th className="px-6 py-4 text-left font-medium">{t("status")}</th>
+              <th className="px-6 py-4 text-left">{t("contractId")}</th>
+              <th className="px-6 py-4 text-left">{t("content")}</th>
+              <th className="px-6 py-4 text-left">{t("platform")}</th>
+              <th className="px-6 py-4 text-left">{t("region")}</th>
+              <th className="px-6 py-4 text-left">{t("status")}</th>
+              <th className="px-6 py-4 text-left">{t("expires")}</th>
+              <th className="px-6 py-4 text-left">{t("action")}</th>
             </tr>
           </thead>
 
           <tbody>
-            {violations.map((v, idx) => (
+            {licenses.map((lic) => (
               <tr
-                key={idx}
-                className="border-t border-white/5 hover:bg-white/5 transition"
+                key={lic.id}
+                className="border-t border-white/5 hover:bg-white/5"
               >
-                {/* DATA (DO NOT TRANSLATE) */}
-                <td className="px-6 py-4 font-medium">{v.content}</td>
-                <td className="px-6 py-4 text-foreground/70">{v.platform}</td>
-                <td className="px-6 py-4 text-foreground/70">{v.territory}</td>
-                <td className="px-6 py-4 text-foreground/70">
-                  {t(v.exclusivity.toLowerCase())}
-                </td>
-
-                {/* UI TRANSLATIONS */}
-                <td className="px-6 py-4 text-foreground/70">
-                  {t(v.issue)}
-                </td>
-
+                <td className="px-6 py-4">{lic.id}</td>
+                <td className="px-6 py-4">{lic.content}</td>
+                <td className="px-6 py-4">{lic.platform}</td>
+                <td className="px-6 py-4">{lic.region}</td>
                 <td className="px-6 py-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${severityStyle[v.severity]}`}
+                    className={`px-3 py-1 rounded-full text-xs ${statusStyles[lic.status]}`}
                   >
-                    {t(v.severity)}
+                    {t(lic.status)}
                   </span>
                 </td>
-
-                <td className="px-6 py-4 text-emerald-400 font-medium">
-                  {v.confidence}
-                </td>
-
-                <td className="px-6 py-4 text-foreground/80">
-                  {t(v.status)}
+                <td className="px-6 py-4">{lic.expires}</td>
+                <td className="px-6 py-4">
+                  <button className="text-emerald-400 hover:underline">
+                    {t("view")}
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {/* FOOTNOTE */}
-      <p className="text-xs text-foreground/50 max-w-2xl">
-        {t("alertsFootnote")}
-      </p>
     </div>
   );
 }
