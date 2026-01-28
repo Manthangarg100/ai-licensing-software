@@ -7,24 +7,24 @@ const licenses = [
   {
     id: "LIC-1024",
     content: "Movie Trailer A",
-    platform: "YouTube",
-    region: "Global",
+    territory: "Global",
+    exclusivity: "Exclusive",
     status: "active",
     expires: "2025-06-30",
   },
   {
     id: "LIC-1025",
     content: "Web Series Episode 3",
-    platform: "OTT Platform",
-    region: "India",
+    territory: "India",
+    exclusivity: "Non-Exclusive",
     status: "expired",
     expires: "2024-12-01",
   },
   {
     id: "LIC-1026",
     content: "Music Track X",
-    platform: "Instagram",
-    region: "US, EU",
+    territory: "US, EU",
+    exclusivity: "Exclusive",
     status: "violation",
     expires: "2025-01-15",
   },
@@ -49,7 +49,6 @@ export default function LicensesPage() {
     if (!file) return;
 
     console.log("Uploaded license file:", file);
-    // TODO: send file to backend (FormData)
   };
 
   return (
@@ -88,8 +87,8 @@ export default function LicensesPage() {
             <tr>
               <th className="px-6 py-4 text-left">{t("contractId")}</th>
               <th className="px-6 py-4 text-left">{t("content")}</th>
-              <th className="px-6 py-4 text-left">{t("platform")}</th>
-              <th className="px-6 py-4 text-left">{t("region")}</th>
+              <th className="px-6 py-4 text-left">{t("territory")}</th>
+              <th className="px-6 py-4 text-left">{t("exclusivity")}</th>
               <th className="px-6 py-4 text-left">{t("status")}</th>
               <th className="px-6 py-4 text-left">{t("expires")}</th>
               <th className="px-6 py-4 text-left">{t("action")}</th>
@@ -104,8 +103,10 @@ export default function LicensesPage() {
               >
                 <td className="px-6 py-4">{lic.id}</td>
                 <td className="px-6 py-4">{lic.content}</td>
-                <td className="px-6 py-4">{lic.platform}</td>
-                <td className="px-6 py-4">{lic.region}</td>
+                <td className="px-6 py-4">{lic.territory}</td>
+                <td className="px-6 py-4">
+                  {t(lic.exclusivity.toLowerCase())}
+                </td>
                 <td className="px-6 py-4">
                   <span
                     className={`px-3 py-1 rounded-full text-xs ${statusStyles[lic.status]}`}
