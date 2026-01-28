@@ -9,23 +9,25 @@ import {
   AlertTriangle,
   UserCheck,
   Gavel,
-  Settings,
+  Settings as SettingsIcon,
   LogOut,
 } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const navItems = [
-  { name: "Overview", href: "/dashboard", icon: LayoutGrid },
-  { name: "Licenses", href: "/dashboard/licenses", icon: FileText },
-  { name: "Monitoring", href: "/dashboard/monitoring", icon: Activity },
-  { name: "Alerts", href: "/dashboard/alerts", icon: AlertTriangle },
-  { name: "Human Review", href: "/dashboard/review", icon: UserCheck },
-  { name: "Enforcement", href: "/dashboard/enforcement", icon: Gavel },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings }, // ✅ NEW
+  { key: "overview", href: "/dashboard", icon: LayoutGrid },
+  { key: "licenses", href: "/dashboard/licenses", icon: FileText },
+  { key: "monitoring", href: "/dashboard/monitoring", icon: Activity },
+  { key: "alerts", href: "/dashboard/alerts", icon: AlertTriangle },
+  { key: "humanReview", href: "/dashboard/review", icon: UserCheck },
+  { key: "enforcement", href: "/dashboard/enforcement", icon: Gavel },
+  { key: "settings", href: "/dashboard/settings", icon: SettingsIcon },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { t } = useLanguage();
 
   return (
     <aside className="w-64 min-h-screen border-r border-white/10 bg-black/50 backdrop-blur-xl flex flex-col">
@@ -37,12 +39,12 @@ export default function Sidebar() {
 
       {/* NAV */}
       <nav className="flex-1 px-3 space-y-1">
-        {navItems.map(({ name, href, icon: Icon }) => {
+        {navItems.map(({ key, href, icon: Icon }) => {
           const active = pathname === href;
 
           return (
             <Link
-              key={name}
+              key={key}
               href={href}
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition
                 ${
@@ -52,7 +54,7 @@ export default function Sidebar() {
                 }`}
             >
               <Icon className="h-4 w-4" />
-              {name}
+              {t(key)}
             </Link>
           );
         })}
@@ -66,7 +68,7 @@ export default function Sidebar() {
                      text-red-400 hover:bg-red-500/10 transition"
         >
           <LogOut className="h-4 w-4" />
-          Logout
+          {t("logout")}
         </button>
       </div>
     </aside>

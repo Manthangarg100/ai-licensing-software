@@ -1,48 +1,52 @@
 "use client";
 
+import { useLanguage } from "@/components/LanguageProvider";
+
 const violations = [
   {
     content: "Music Track X",
     platform: "Instagram",
-    issue: "Used outside licensed region",
-    severity: "High",
+    issue: "usageBeyondRegion",
+    severity: "high",
     confidence: "96%",
-    status: "Action Required",
+    status: "actionRequired",
   },
   {
     content: "Movie Trailer A",
     platform: "YouTube",
-    issue: "License expired",
-    severity: "Medium",
+    issue: "expiredLicenseUsage",
+    severity: "medium",
     confidence: "89%",
-    status: "Under Review",
+    status: "underReview",
   },
   {
     content: "Web Series Ep 3",
     platform: "OTT Platform",
-    issue: "Exceeded allowed views",
-    severity: "Low",
+    issue: "exceededViews",
+    severity: "low",
     confidence: "72%",
-    status: "Logged",
+    status: "logged",
   },
 ];
 
 const severityStyle: Record<string, string> = {
-  High: "text-red-400 bg-red-400/10",
-  Medium: "text-amber-400 bg-amber-400/10",
-  Low: "text-emerald-400 bg-emerald-400/10",
+  high: "text-red-400 bg-red-400/10",
+  medium: "text-amber-400 bg-amber-400/10",
+  low: "text-emerald-400 bg-emerald-400/10",
 };
 
 export default function AlertsPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="p-10 space-y-10">
       {/* HEADER */}
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">
-          Alerts & Violations
+          {t("alerts")}
         </h1>
         <p className="mt-2 text-foreground/70 max-w-xl">
-          Review detected violations, AI confidence levels, and enforcement status.
+          {t("alertsDescription")}
         </p>
       </div>
 
@@ -51,12 +55,14 @@ export default function AlertsPage() {
         <table className="w-full text-sm">
           <thead className="bg-white/5 text-foreground/70">
             <tr>
-              <th className="px-6 py-4 text-left font-medium">Content</th>
-              <th className="px-6 py-4 text-left font-medium">Platform</th>
-              <th className="px-6 py-4 text-left font-medium">Issue</th>
-              <th className="px-6 py-4 text-left font-medium">Severity</th>
-              <th className="px-6 py-4 text-left font-medium">AI Confidence</th>
-              <th className="px-6 py-4 text-left font-medium">Status</th>
+              <th className="px-6 py-4 text-left font-medium">{t("content")}</th>
+              <th className="px-6 py-4 text-left font-medium">{t("platform")}</th>
+              <th className="px-6 py-4 text-left font-medium">{t("issue")}</th>
+              <th className="px-6 py-4 text-left font-medium">{t("severity")}</th>
+              <th className="px-6 py-4 text-left font-medium">
+                {t("aiConfidence")}
+              </th>
+              <th className="px-6 py-4 text-left font-medium">{t("status")}</th>
             </tr>
           </thead>
 
@@ -66,20 +72,30 @@ export default function AlertsPage() {
                 key={idx}
                 className="border-t border-white/5 hover:bg-white/5 transition"
               >
+                {/* DO NOT TRANSLATE DATA */}
                 <td className="px-6 py-4 font-medium">{v.content}</td>
                 <td className="px-6 py-4 text-foreground/70">{v.platform}</td>
-                <td className="px-6 py-4 text-foreground/70">{v.issue}</td>
+
+                {/* TRANSLATED UI VALUES */}
+                <td className="px-6 py-4 text-foreground/70">
+                  {t(v.issue)}
+                </td>
+
                 <td className="px-6 py-4">
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium ${severityStyle[v.severity]}`}
                   >
-                    {v.severity}
+                    {t(v.severity)}
                   </span>
                 </td>
+
                 <td className="px-6 py-4 text-emerald-400 font-medium">
                   {v.confidence}
                 </td>
-                <td className="px-6 py-4 text-foreground/80">{v.status}</td>
+
+                <td className="px-6 py-4 text-foreground/80">
+                  {t(v.status)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -88,8 +104,7 @@ export default function AlertsPage() {
 
       {/* FOOTNOTE */}
       <p className="text-xs text-foreground/50 max-w-2xl">
-        Violations are detected automatically using Sanrakshak AI’s monitoring engine.
-        High severity alerts may trigger automated enforcement or require human review.
+        {t("alertsFootnote")}
       </p>
     </div>
   );

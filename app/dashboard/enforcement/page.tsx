@@ -1,48 +1,49 @@
 "use client";
 
 import { ShieldCheck, Gavel, ExternalLink } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const actions = [
   {
     id: "ENF-1023",
     content: "Movie Trailer – Region EU",
-    violation: "Usage beyond licensed region",
-    action: "Takedown Notice Sent",
-    status: "In Progress",
+    violation: "usageBeyondRegion",
+    action: "takedownNoticeSent",
+    status: "inProgress",
     date: "12 Sept 2026",
   },
   {
     id: "ENF-1024",
     content: "Series Episode 3",
-    violation: "Expired license usage",
-    action: "Platform Restriction",
-    status: "Completed",
+    violation: "expiredLicenseUsage",
+    action: "platformRestriction",
+    status: "completed",
     date: "10 Sept 2026",
   },
   {
     id: "ENF-1025",
     content: "Music Track – Ad Campaign",
-    violation: "Unauthorized commercial use",
-    action: "Legal Escalation",
-    status: "Pending Review",
+    violation: "unauthorizedCommercialUse",
+    action: "legalEscalation",
+    status: "pendingReview",
     date: "9 Sept 2026",
   },
 ];
 
 export default function EnforcementPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="p-10">
       {/* HEADER */}
       <div className="mb-10">
         <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
           <Gavel className="h-5 w-5 text-emerald-400" />
-          Enforcement Actions
+          {t("enforcementActions")}
         </h1>
 
         <p className="mt-2 text-sm text-foreground/70 max-w-2xl">
-          Confirmed violations that required legal, platform, or compliance
-          actions. These actions are initiated after AI detection and human
-          review.
+          {t("enforcementDescription")}
         </p>
       </div>
 
@@ -51,12 +52,12 @@ export default function EnforcementPage() {
         <table className="w-full text-sm">
           <thead className="bg-white/5 text-foreground/70">
             <tr>
-              <th className="px-6 py-4 text-left font-medium">Action ID</th>
-              <th className="px-6 py-4 text-left font-medium">Content</th>
-              <th className="px-6 py-4 text-left font-medium">Violation</th>
-              <th className="px-6 py-4 text-left font-medium">Action Taken</th>
-              <th className="px-6 py-4 text-left font-medium">Status</th>
-              <th className="px-6 py-4 text-left font-medium">Date</th>
+              <th className="px-6 py-4 text-left font-medium">{t("actionId")}</th>
+              <th className="px-6 py-4 text-left font-medium">{t("content")}</th>
+              <th className="px-6 py-4 text-left font-medium">{t("violation")}</th>
+              <th className="px-6 py-4 text-left font-medium">{t("actionTaken")}</th>
+              <th className="px-6 py-4 text-left font-medium">{t("status")}</th>
+              <th className="px-6 py-4 text-left font-medium">{t("date")}</th>
               <th className="px-6 py-4 text-left font-medium"></th>
             </tr>
           </thead>
@@ -76,13 +77,13 @@ export default function EnforcementPage() {
                 </td>
 
                 <td className="px-6 py-4 text-foreground/70">
-                  {item.violation}
+                  {t(item.violation)}
                 </td>
 
                 <td className="px-6 py-4">
                   <span className="inline-flex items-center gap-1 text-emerald-400">
                     <ShieldCheck className="h-4 w-4" />
-                    {item.action}
+                    {t(item.action)}
                   </span>
                 </td>
 
@@ -107,8 +108,7 @@ export default function EnforcementPage() {
 
       {/* FOOTNOTE */}
       <p className="mt-6 text-xs text-foreground/50 max-w-xl">
-        Enforcement actions may include platform takedowns, region blocking,
-        partner notifications, or legal escalation depending on severity.
+        {t("enforcementFootnote")}
       </p>
     </div>
   );
@@ -117,10 +117,12 @@ export default function EnforcementPage() {
 /* ---------- STATUS BADGE ---------- */
 
 function StatusBadge({ status }: { status: string }) {
+  const { t } = useLanguage();
+
   const styles: Record<string, string> = {
-    "Completed": "bg-emerald-500/15 text-emerald-400",
-    "In Progress": "bg-yellow-500/15 text-yellow-400",
-    "Pending Review": "bg-red-500/15 text-red-400",
+    completed: "bg-emerald-500/15 text-emerald-400",
+    inProgress: "bg-yellow-500/15 text-yellow-400",
+    pendingReview: "bg-red-500/15 text-red-400",
   };
 
   return (
@@ -129,7 +131,7 @@ function StatusBadge({ status }: { status: string }) {
         styles[status] || "bg-white/10 text-foreground/70"
       }`}
     >
-      {status}
+      {t(status)}
     </span>
   );
 }

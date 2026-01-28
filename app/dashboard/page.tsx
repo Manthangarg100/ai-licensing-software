@@ -1,5 +1,7 @@
 "use client";
 
+import { useLanguage } from "@/components/LanguageProvider";
+
 const mockDashboardData = {
   metrics: {
     activeLicenses: 240,
@@ -19,6 +21,7 @@ const mockDashboardData = {
 };
 
 export default function DashboardOverview() {
+  const { t } = useLanguage();
   const { metrics, aiStatus, humanFeedback } = mockDashboardData;
 
   return (
@@ -26,29 +29,29 @@ export default function DashboardOverview() {
       {/* HEADER */}
       <div className="mb-10">
         <h1 className="text-3xl font-semibold tracking-tight">
-          Dashboard Overview
+          {t("dashboardOverview")}
         </h1>
         <p className="mt-2 text-foreground/60">
-          Monitor content usage, AI enforcement, and human reviews in one place.
+          {t("dashboardDescription")}
         </p>
       </div>
 
       {/* METRICS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
         <MetricCard
-          label="Active Licenses"
+          label={t("activeLicenses")}
           value={metrics.activeLicenses}
         />
         <MetricCard
-          label="Regions Covered"
+          label={t("regionsCovered")}
           value={metrics.regionsCovered}
         />
         <MetricCard
-          label="Active Alerts"
+          label={t("activeAlerts")}
           value={metrics.activeAlerts}
         />
         <MetricCard
-          label="Violations"
+          label={t("violations")}
           value={metrics.violations}
         />
       </div>
@@ -58,17 +61,20 @@ export default function DashboardOverview() {
         {/* AI STATUS */}
         <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-6">
           <h2 className="text-lg font-medium mb-4">
-            Sanrakshak AI Status
+            {t("aiStatus")}
           </h2>
 
           <div className="space-y-3 text-sm text-foreground/80">
-            <StatusRow label="Last Evaluation Run" value={aiStatus.lastRun} />
             <StatusRow
-              label="Rules Applied"
-              value={`${aiStatus.rulesApplied}`}
+              label={t("lastEvaluationRun")}
+              value={aiStatus.lastRun}
             />
             <StatusRow
-              label="AI Confidence"
+              label={t("rulesApplied")}
+              value={aiStatus.rulesApplied}
+            />
+            <StatusRow
+              label={t("aiConfidence")}
               value={`${aiStatus.confidence}%`}
               highlight
             />
@@ -78,16 +84,16 @@ export default function DashboardOverview() {
         {/* HUMAN FEEDBACK */}
         <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-6">
           <h2 className="text-lg font-medium mb-4">
-            Human Feedback Loop
+            {t("humanFeedback")}
           </h2>
 
           <div className="space-y-3 text-sm text-foreground/80">
             <StatusRow
-              label="Pending Reviews"
+              label={t("pendingReviews")}
               value={humanFeedback.pendingReviews}
             />
             <StatusRow
-              label="Escalations"
+              label={t("escalations")}
               value={humanFeedback.escalations}
               highlight
             />
